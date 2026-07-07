@@ -1,0 +1,22 @@
+# GoRecon binary
+gorecon
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.test
+*.out
+vendor/
+
+# Environment
+.env
+.env.local
