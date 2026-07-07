@@ -41,28 +41,33 @@
 ### Reconnaissance Phases
 
 ```mermaid
-flowchart LR
-    subgraph DISCOVERY["🔍 DISCOVERY<br/>What exists?"]
-        A[subdomain<br/>subfinder]
-        B[dns<br/>dnsx]
-        C[scan<br/>naabu]
+flowchart TD
+    subgraph DISCOVERY["🔍 DISCOVERY — What exists?"]
+        direction LR
+        A["subdomain"] --> B["dns"] --> C["scan"]
     end
 
-    subgraph ENUMERATION["📋 ENUMERATION<br/>What runs there?"]
-        D[http<br/>httpx]
-        E[tls<br/>tlsx]
-        F[cdn<br/>cdncheck]
-        G[crawl<br/>katana]
+    subgraph ENUMERATION["📋 ENUMERATION — What runs there?"]
+        direction LR
+        D["http"] ~~~ E["tls"] ~~~ F["cdn"] ~~~ G["takeover"]
     end
 
-    subgraph EXPLOITATION["💥 EXPLOITATION<br/>What is weak?"]
-        H[vuln<br/>nuclei]
+    subgraph CRAWL["🕸️ DEEP DISCOVERY — What's hidden?"]
+        direction LR
+        H["crawl"]
     end
 
-    DISCOVERY --> ENUMERATION --> EXPLOITATION
+    subgraph EXPLOITATION["💥 EXPLOITATION — What is weak?"]
+        direction LR
+        I["vuln"]
+    end
+
+    DISCOVERY --> ENUMERATION --> CRAWL --> EXPLOITATION
+    ENUMERATION --> EXPLOITATION
 
     style DISCOVERY fill:#1a1a2e,stroke:#16213e,color:#e94560
     style ENUMERATION fill:#1a1a2e,stroke:#16213e,color:#f5a623
+    style CRAWL fill:#1a1a2e,stroke:#16213e,color:#4ecdc4
     style EXPLOITATION fill:#1a1a2e,stroke:#16213e,color:#e94560
 ```
 
