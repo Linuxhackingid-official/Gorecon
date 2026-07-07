@@ -20,18 +20,18 @@
 
 ## Engines
 
-| Command | Engine | Purpose |
-|----------|--------|---------|
-| `subdomain` | subfinder | Passive subdomain enumeration |
-| `dns` | dnsx | DNS resolution & bruteforce |
-| `scan` | naabu | Port scanning (SYN/CONNECT) |
-| `http` | httpx | HTTP probing & technology detection |
-| `crawl` | katana | Web crawling & endpoint discovery |
-| `vuln` | nuclei | Template-based vulnerability scanning |
-| `tls` | tlsx | TLS/SSL certificate analysis |
-| `cdn` | cdncheck | CDN / Cloud / WAF detection |
-| `takeover` | native | Subdomain takeover detection (30+ services) |
-| `uncover` | uncover | External asset discovery (Shodan, Censys, Fofa, etc.) |
+| Command | Purpose |
+|----------|---------|
+| `subdomain` | Passive subdomain enumeration |
+| `dns` | DNS resolution & bruteforce |
+| `scan` | Port scanning (SYN/CONNECT) |
+| `http` | HTTP probing & technology detection |
+| `crawl` | Web crawling & endpoint discovery |
+| `vuln` | Template-based vulnerability scanning |
+| `tls` | TLS/SSL certificate analysis |
+| `cdn` | CDN / Cloud / WAF detection |
+| `takeover` | Subdomain takeover detection (30+ services) |
+| `uncover` | External asset discovery (19 search engines) |
 
 > **Aliases:** `sub`, `dnsx`, `portscan`/`naabu`, `httpx`, `katana`, `nuclei`, `tlsx`/`ssl`, `cdncheck`, `take`, `pipeline`, `search`, `list`
 
