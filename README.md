@@ -1,6 +1,6 @@
 # GoRecon
 
-> Nine ProjectDiscovery engines. One binary. Zero friction.
+> Ten ProjectDiscovery engines. One binary. Zero friction.
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
@@ -31,8 +31,9 @@
 | `tls` | tlsx | TLS/SSL certificate analysis |
 | `cdn` | cdncheck | CDN / Cloud / WAF detection |
 | `takeover` | native | Subdomain takeover detection (30+ services) |
+| `uncover` | uncover | External asset discovery (Shodan, Censys, Fofa, etc.) |
 
-> **Aliases:** `sub`, `dnsx`, `portscan`/`naabu`, `httpx`, `katana`, `nuclei`, `tlsx`/`ssl`, `cdncheck`, `take`, `pipeline`, `list`
+> **Aliases:** `sub`, `dnsx`, `portscan`/`naabu`, `httpx`, `katana`, `nuclei`, `tlsx`/`ssl`, `cdncheck`, `take`, `pipeline`, `search`, `list`
 
 ---
 
@@ -312,6 +313,7 @@ flowchart TD
         HP["http"] --> I2
         TL["tls"] --> I2
         CD["cdn"] --> I3
+        UN["uncover"] --> I3
         CR["crawl"] --> I4
         VN["vuln"] --> I5
     end
@@ -517,7 +519,48 @@ Unbounce, LaunchRock, Acquia, GetResponse, Campaign Monitor, WordPress, MailChim
 
 ---
 
-### 5. `crawl` — Endpoint Discovery
+### 5. `uncover` — External Asset Discovery
+
+```mermaid
+flowchart LR
+    IN["domain / IP / query"] --> ENG["19 search engines<br/>Shodan, Censys, Fofa, Hunter..."]
+    ENG --> OUT["IP:port (hostname) [source]<br/>JSONL output"]
+```
+
+Query public search engines to discover exposed hosts, IPs, and services beyond passive DNS enumeration. Free tier via `shodan-idb` (no API key). Advanced use with raw search queries across Shodan, Censys, Fofa, Hunter, ZoomEye, and more.
+
+```bash
+gorecon uncover -d example.com                                # free: DNS + shodan-idb
+gorecon uncover -d example.com -a shodan,censys               # multi-agent
+gorecon uncover -d example.com -j -o results.jsonl            # JSON output
+gorecon uncover -i 1.2.3.4                                    # single IP
+gorecon uncover -q "ssl:example.com" -a shodan -l 500         # raw query
+gorecon uncover -q "org:Google" -a shodan,censys,fofa         # multi-agent query
+cat ips.txt | gorecon uncover -silent                         # pipe via stdin
+```
+
+| Flag | Description |
+|------|-------------|
+| `-d`, `--domain` | Target domain (auto-resolves DNS → queries shodan-idb) |
+| `-i`, `--ip` | Target IP or CIDR |
+| `-q`, `--query` | Raw search query (requires API key agent) |
+| `-a`, `--agent` | Search engines (default: shodan-idb) |
+| `-l`, `--limit` | Max results per agent (default: 100) |
+| `-o`, `--output` | Output file |
+| `-j`, `--json` | JSONL output |
+| `-silent` | Results only |
+| `-v`, `--verbose` | Show errors and warnings |
+
+**Supported Agents (19):**
+`shodan-idb` (free), `shodan`, `censys`, `fofa`, `quake`, `hunter`, `zoomeye`,
+`netlas`, `criminalip`, `publicwww`, `hunterhow`, `google`, `odin`, `binaryedge`,
+`onyphe`, `driftnet`, `greynoise`, `daydaymap`, `nerdydata`
+
+> API keys stored in `~/.config/uncover/provider-config.yaml`. See `gorecon uncover -h` for provider config format.
+
+---
+
+### 6. `crawl` — Endpoint Discovery
 
 ```mermaid
 flowchart LR
@@ -543,7 +586,7 @@ gorecon crawl https://example.com -d 3 -td --json            # + tech detection
 
 ---
 
-### 6. `vuln` — Vulnerability Scanning
+### 7. `vuln` — Vulnerability Scanning
 
 ```mermaid
 flowchart LR
@@ -690,6 +733,10 @@ gorecon recon example.com \
 ║    gorecon tls  -l dns.txt -san -cn -tv    -o tls.txt        ║
 ║    gorecon cdn  -l dns.txt -resp           -o cdn.txt        ║
 ║    gorecon takeover -l dns.txt             -o takeover.txt   ║
+║                                                              ║
+║  SEARCH ENGINES (external discovery):                         ║
+║    gorecon uncover -d <domain>                                ║
+║    gorecon uncover -q "ssl:target" -a shodan -l 100           ║
 ║                                                              ║
 ║  DIG DEEPER:                                                 ║
 ║    gorecon crawl <live-url> -d 3 -s breadth-first            ║
