@@ -119,13 +119,13 @@ flowchart TD
 flowchart TD
     START(["gorecon recon example.com"]) --> S1
 
-    S1["1. SUBDOMAIN<br/>subfinder"] --> S2
+    S1["1. SUBDOMAIN"] --> S2
     S1 -.-> |"output"| F1["1-subdomains.txt"]
 
-    S2["2. DNS<br/>dnsx"] --> S3
+    S2["2. DNS"] --> S3
     S2 -.-> |"output"| F2["2-dns-resolved.txt"]
 
-    S3["3. SCAN<br/>naabu"] --> S4
+    S3["3. SCAN"] --> S4
 
     S3 -.-> |"output"| F3["3-open-ports.txt"]
 
@@ -134,17 +134,17 @@ flowchart TD
     S4 --> S4C
     S4 --> S4D
 
-    S4A["4a. HTTP<br/>httpx"] --> S5
+    S4A["4a. HTTP"] --> S5
     S4A -.-> |"output"| F4A["4-http-live.txt"]
 
-    S4B["4b. TLS<br/>tlsx"] -.-> |"output"| F4B["4-tls-results.txt"]
-    S4C["4c. CDN<br/>cdncheck"] -.-> |"output"| F4C["4-cdn-results.txt"]
-    S4D["4d. Takeover<br/>native"] -.-> |"output"| F4D["4-takeover-results.txt"]
+    S4B["4b. TLS"] -.-> |"output"| F4B["4-tls-results.txt"]
+    S4C["4c. CDN"] -.-> |"output"| F4C["4-cdn-results.txt"]
+    S4D["4d. TAKEOVER"] -.-> |"output"| F4D["4-takeover-results.txt"]
 
-    S5["5. CRAWL<br/>katana"] --> S6
+    S5["5. CRAWL"] --> S6
     S5 -.-> |"output"| F5["5-crawl-endpoints.txt"]
 
-    S6["6. VULN<br/>nuclei"] --> DONE
+    S6["6. VULN"] --> DONE
     S6 -.-> |"output"| F6["6-vulnerabilities.jsonl"]
 
     DONE(["✅ Pipeline Complete"])
@@ -286,7 +286,7 @@ gorecon-output-20260706-120000/
 ├── 4-cdn-results.txt         ← host [type] [provider]
 ├── 4-takeover-results.txt    ← subdomain CNAME service http_code verified
 ├── 5-crawl-endpoints.txt     ← discovered URLs and endpoints
-└── 6-vulnerabilities.jsonl   ← nuclei findings in JSONL format
+└── 6-vulnerabilities.jsonl   ← vulnerability findings in JSONL format
 ```
 
 ---
@@ -329,7 +329,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    IN["example.com"] --> ENG["subfinder<br/>50+ sources"]
+    IN["example.com"] --> ENG["50+ passive sources"]
     ENG --> OUT["api.example.com<br/>app.example.com<br/>dev.example.com<br/>..."]
 ```
 
@@ -358,7 +358,7 @@ gorecon subdomain -dL domains.txt -o all.txt         # multiple domains
 
 ```mermaid
 flowchart LR
-    IN["hosts.txt"] --> ENG["dnsx<br/>A, AAAA, CNAME, NS, MX, TXT, SOA..."]
+    IN["hosts.txt"] --> ENG["A, AAAA, CNAME, NS, MX, TXT, SOA..."]
     ENG --> OUT["host [A] [10.0.0.1]<br/>host [CNAME] [elb.amazonaws.com]"]
 ```
 
@@ -388,7 +388,7 @@ gorecon dns -l hosts.txt -a -ro > ips.txt       # IPs only (for piping)
 
 ```mermaid
 flowchart LR
-    IN["10.0.0.1<br/>10.0.0.2"] --> ENG["naabu<br/>SYN / CONNECT"]
+    IN["10.0.0.1<br/>10.0.0.2"] --> ENG["SYN / CONNECT scan"]
     ENG --> OUT["10.0.0.1:80<br/>10.0.0.1:443<br/>10.0.0.2:443<br/>10.0.0.2:8080"]
 ```
 
@@ -421,10 +421,10 @@ flowchart TD
     DNS --> CDN
     DNS --> TAKEOVER
 
-    HTTP["4a. HTTP · httpx"] --> HO["https://host [200] [Title] [nginx,react]"]
-    TLS["4b. TLS · tlsx"] --> TO["host:443 tls13 CN:*.example.com SAN:..."]
-    CDN["4c. CDN · cdncheck"] --> CO["host [cloud] [aws]<br/>host [cdn] [cloudflare]"]
-    TAKEOVER["4d. Takeover · native"] --> TKO["⚠ api.example.com<br/>   CNAME: api.herokuapp.com<br/>   Service: Heroku"]
+    HTTP["4a. HTTP"] --> HO["https://host [200] [Title] [nginx,react]"]
+    TLS["4b. TLS"] --> TO["host:443 tls13 CN:*.example.com SAN:..."]
+    CDN["4c. CDN"] --> CO["host [cloud] [aws]<br/>host [cdn] [cloudflare]"]
+    TAKEOVER["4d. TAKEOVER"] --> TKO["⚠ api.example.com<br/>   CNAME: api.herokuapp.com<br/>   Service: Heroku"]
 
     style DNS fill:#0e5160,color:#fff
     style HTTP fill:#2d6a4f,color:#fff
@@ -502,7 +502,7 @@ cat subs.txt | gorecon takeover -silent                        # pipe via stdin
 | `-t`, `--threads` | Concurrency (default: 50) |
 | `-j`, `--json` | JSON output |
 | `-v`, `--verbose` | Show all CNAME records found |
-| `-all` | Use all subfinder sources |
+| `-all` | Use all passive sources |
 | `--only` | Only check specific service (e.g. `github`, `heroku`) |
 | `--exclude` | Exclude service (e.g. `cloudfront`) |
 | `--no-discover` | Skip subdomain discovery |
@@ -521,7 +521,7 @@ Unbounce, LaunchRock, Acquia, GetResponse, Campaign Monitor, WordPress, MailChim
 
 ```mermaid
 flowchart LR
-    IN["https://example.com<br/>(live, 200 OK)"] --> ENG["katana<br/>link extraction"]
+    IN["https://example.com<br/>(live, 200 OK)"] --> ENG["link extraction<br/>+ JS parsing"]
     ENG --> OUT["/<br/>/blog/<br/>/api/v1/users<br/>/wp-json/wp/v2/pages<br/>/admin/panel<br/>/backup.zip"]
 ```
 
@@ -547,7 +547,7 @@ gorecon crawl https://example.com -d 3 -td --json            # + tech detection
 
 ```mermaid
 flowchart LR
-    IN["https://example.com<br/>(live URLs)"] --> ENG["nuclei<br/>13,000+ templates"]
+    IN["https://example.com<br/>(live URLs)"] --> ENG["13,000+ templates<br/>CVE, misconfig, exposure"]
     ENG --> OUT["[CVE-2024-xxxx] [critical]<br/>[exposed-panel] [medium]<br/>[missing-headers] [info]"]
 ```
 
