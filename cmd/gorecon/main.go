@@ -65,6 +65,8 @@ func main() {
 		err = runRecon(args)
 	case "takeover", "take":
 		err = runTakeover(args)
+	case "uncover", "search":
+		err = runUncover(args)
 	case "tools", "list":
 		listTools()
 		os.Exit(0)
@@ -117,6 +119,8 @@ func showHelp(cmd string) {
 		printReconHelp()
 	case "takeover", "take":
 		printTakeoverHelp()
+	case "uncover", "search":
+		printUncoverHelp()
 	default:
 		printUsage()
 	}
@@ -137,6 +141,7 @@ func listTools() {
 	fmt.Printf("  %-20s %s\n", "cdn", "CDN/Cloud/WAF detection")
 	fmt.Printf("  %-20s %s\n", "recon", "Full pipeline: subdomain->dns->http->vuln")
 	fmt.Printf("  %-20s %s\n", "takeover", "Subdomain takeover detection")
+	fmt.Printf("  %-20s %s\n", "uncover", "External asset discovery (Shodan, Censys, etc.)")
 	fmt.Println()
 	fmt.Println("  Use 'gorecon <command> --help' for detailed usage.")
 }

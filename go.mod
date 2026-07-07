@@ -3,7 +3,6 @@ module gorecon
 go 1.26.4
 
 require (
-	github.com/logrusorgru/aurora/v4 v4.0.0
 	github.com/miekg/dns v1.1.68
 	github.com/projectdiscovery/cdncheck v1.2.42
 	github.com/projectdiscovery/dnsx v1.2.3
@@ -13,9 +12,11 @@ require (
 	github.com/projectdiscovery/mapcidr v1.1.97
 	github.com/projectdiscovery/naabu/v2 v2.6.1
 	github.com/projectdiscovery/nuclei/v3 v3.10.0
+	github.com/projectdiscovery/ratelimit v0.0.88
 	github.com/projectdiscovery/retryabledns v1.0.115
 	github.com/projectdiscovery/subfinder/v2 v2.14.0
 	github.com/projectdiscovery/tlsx v1.2.2
+	github.com/projectdiscovery/uncover v1.2.1
 	github.com/projectdiscovery/utils v0.11.1
 )
 
@@ -238,6 +239,7 @@ require (
 	github.com/lib/pq v1.12.3 // indirect
 	github.com/libdns/libdns v1.1.1 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
+	github.com/logrusorgru/aurora/v4 v4.0.0 // indirect
 	github.com/lor00x/goldap v0.0.0-20240304151906-8d785c64d1c8 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20250827001030-24949be3fa54 // indirect
@@ -317,12 +319,10 @@ require (
 	github.com/projectdiscovery/machineid v0.0.0-20250715113114-c77eb3567582 // indirect
 	github.com/projectdiscovery/n3iwf v0.0.0-20230523120440-b8cd232ff1f5 // indirect
 	github.com/projectdiscovery/networkpolicy v0.1.41 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.88 // indirect
 	github.com/projectdiscovery/rawhttp v0.1.90 // indirect
 	github.com/projectdiscovery/rdap v0.9.0 // indirect
 	github.com/projectdiscovery/retryablehttp-go v1.3.16 // indirect
 	github.com/projectdiscovery/sarif v0.1.0 // indirect
-	github.com/projectdiscovery/uncover v1.2.1 // indirect
 	github.com/projectdiscovery/useragent v0.0.108 // indirect
 	github.com/projectdiscovery/wappalyzergo v0.2.86 // indirect
 	github.com/projectdiscovery/yamldoc-go v1.0.6 // indirect

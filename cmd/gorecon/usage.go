@@ -33,6 +33,7 @@ Recon Commands:
   cdn         CDN/Cloud/WAF detection
   recon       Full pipeline: subdomain->dns->http->vuln
   takeover    Subdomain takeover detection
+  uncover     External asset discovery (Shodan, Censys, etc.)
 
 Utility Commands:
   tools       List all integrated tools
