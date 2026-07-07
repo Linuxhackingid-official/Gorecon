@@ -201,42 +201,6 @@ sequenceDiagram
     U->>VN: 6. scan vulnerabilities
 ```
 
-### ❌ Wrong vs ✅ Correct Order
-
-```mermaid
-flowchart LR
-    subgraph WRONG["❌ WRONG ORDER"]
-        direction TB
-        W1["subdomain"] --> W2["dns"] --> W3["scan"] --> W4["http"]
-        W4 --> W5["crawl"]
-        W4 -.-> W6["tls ← DNS input!"]
-        W4 -.-> W7["cdn ← DNS input!"]
-        W6 --> W8["vuln"]
-        W7 --> W8
-    end
-
-    subgraph RIGHT["✅ RIGHT ORDER"]
-        direction TB
-        R1["subdomain"] --> R2["dns"] --> R3["scan"]
-        R3 --> R4A["http"]
-        R3 --> R4B["tls"]
-        R3 --> R4C["cdn"]
-        R3 --> R4D["takeover"]
-        R4A --> R5["crawl"]
-        R4A --> R6["vuln"]
-    end
-
-    style WRONG fill:#3d0000,stroke:#e94560,color:#e94560
-    style RIGHT fill:#002d00,stroke:#4ecdc4,color:#4ecdc4
-```
-
-| Wrong | Right | Why |
-|-------|-------|-----|
-| TLS/CDN after crawl | TLS/CDN **parallel** with HTTP | They consume DNS output, not HTTP output |
-| Takeover after vuln | Takeover **parallel** with HTTP | Consumes DNS CNAME records, not HTTP output |
-| Crawl before HTTP confirmed | Crawl **after** HTTP | Crawling dead URLs wastes time |
-| Vuln before endpoints known | Vuln **last** | Needs confirmed live endpoints from HTTP + crawl |
-
 ### Usage
 
 ```bash
